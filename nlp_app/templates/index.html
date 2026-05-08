@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Spam Guardian</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .btn-primary {
+            background: #764ba2;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+        .btn-primary:hover {
+            background: #667eea;
+            transform: translateY(-2px);
+        }
+        .result-box {
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 25px;
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="glass-card text-center">
+                    <h2 class="mb-4" style="color: #4b306a;">🛡️ Spam Guardian</h2>
+                    <p class="text-muted">Enter an SMS or Email message to analyze for spam signatures.</p>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <textarea name="message" class="form-control" rows="5" 
+                                    placeholder="Paste message here..." required 
+                                    style="border-radius: 15px; border: 2px solid #eee;">{{ original_text }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 fw-bold">Analyze Now</button>
+                    </form>
+
+                    {% if prediction %}
+                        <div class="result-box {% if prediction == 'SPAM' %}alert-danger{% else %}alert-success{% endif %}">
+                            <small class="text-uppercase fw-bold">Analysis Result</small>
+                            <h3 class="mt-2">{{ prediction }}</h3>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
